@@ -28,8 +28,13 @@ class Dataset(ABC):
         """Switch indexing to the held-out split."""
         self.data = self.test_data
 
+    def all(self):
+        x, y = self.data
+        return Tensor(x), Tensor(y)
+
     def __len__(self):
-        return math.ceil(len(self.data[0]) / self.batch_size)
+        x, y = self.data
+        return math.ceil(len(x) / self.batch_size)
 
     def __getitem__(self, index):
         s = self._slice(index)

@@ -40,18 +40,18 @@ class Linear(Layer):
 
     def __init__(self, in_size, out_size):
         super().__init__()
-        self.weight = Tensor(np.random.randn(in_size, out_size).astype(DTYPE) * np.sqrt(2 / in_size))
-        self.bias = Tensor(np.zeros(out_size, dtype=DTYPE))
+        self.weight = Tensor(np.random.randn(out_size, in_size).astype(DTYPE) * np.sqrt(2 / in_size))
+        self.bias = Tensor(np.random.rand(out_size).astype(DTYPE))
 
     def forward(self, x: Tensor):
-        p = Tensor(x.data @ self.weight.data + self.bias.data)
+        p = Tensor(x.data @ self.weight.data.T + self.bias.data)
 
         def backward_fn():
             # flatten leading (batch/seq) dims so the weight grad is a plain matmul
             grad = p.grad.reshape(-1, p.grad.shape[-1])
-            self.weight.grad += x.data.reshape(-1, x.shape[-1]).T @ grad
+            self.weight.grad += grad.T @ x.data.reshape(-1, x.shape[-1])
             self.bias.grad += np.sum(grad, axis=0)
-            x.grad += p.grad @ self.weight.data.T
+            x.grad += p.grad @ self.weight.data
 
         return p.attach(backward_fn, {self.weight, self.bias, x})
 
