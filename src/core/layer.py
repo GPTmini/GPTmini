@@ -113,7 +113,7 @@ class Embedding(Layer):
         return [self.weight]
 
 
-class MainPool(Layer):
+class MeanPool(Layer):
 
     def forward(self, x: Tensor):
         p = Tensor(np.mean(x.data, axis=1))
