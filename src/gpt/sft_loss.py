@@ -20,10 +20,10 @@ class SFTLoss(Loss):
         denom = max(float(np.sum(flat_mask)), 1.0)  # avoid /0 if a batch has no unmasked tokens
         ce = Tensor(-np.sum(np.log(picked) * flat_mask) / denom)
 
-        def backward_fn():
+        def gradient_fn():
             flat_grad = flat_softmax.copy()
             flat_grad[np.arange(flat_y.shape[0]), flat_y] -= 1
             flat_grad *= flat_mask[:, None]  # zero out gradient on masked-out positions
             p.grad += ce.grad * flat_grad.reshape(softmax.shape) / denom
 
-        return ce.attach(backward_fn, {p})
+        return ce.attach(gradient_fn, {p})

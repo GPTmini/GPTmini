@@ -12,12 +12,12 @@ from itertools import pairwise
 import numpy as np
 
 from src.config import *
+from src.core.optimizer import AdamWOptimizer
 from src.core.tensor import Tensor
 from src.gpt.gpt import GPT
 from src.gpt.gpt_dataset import GPTDataset
 from src.gpt.gpt_loss import GPTLoss
 from src.gpt.gpt_model import GPTModel
-from src.gpt.optimizer import AdamWOptimizer
 
 
 def sft_sample():
@@ -35,7 +35,7 @@ def dpo_sample():
 
     layer = GPT(dataset.vocab_size, CONTEXT_SIZE, EMBEDDING_SIZE, HEADS, BLOCKS, 0.0)
     loss_fn = GPTLoss()
-    optimizer = AdamWOptimizer(layer.parameters(), lr=GPT_MAX_LR)
+    optimizer = AdamWOptimizer(layer.parameters, lr=GPT_MAX_LR)
     GPTModel(GPT_MODEL, layer, loss_fn, optimizer)  # loads pretrained weights into `layer`
     layer.eval()
 

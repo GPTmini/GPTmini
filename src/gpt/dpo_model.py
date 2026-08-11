@@ -71,7 +71,7 @@ class DPOModel(GPTModel):
         picked = np.clip(np.take_along_axis(softmax, y[..., None], axis=-1).squeeze(-1), 1e-10, 1)
         p = Tensor(np.sum(np.log(picked) * mask, axis=-1))
 
-        def backward_fn():
+        def gradient_fn():
             # d(log softmax_y)/dx = onehot(y) - softmax, summed over masked timesteps
             grad = -softmax.copy()
             target_grad = np.take_along_axis(grad, y[..., None], axis=-1) + 1.0
@@ -79,11 +79,11 @@ class DPOModel(GPTModel):
             grad *= mask[..., None]
             x.grad += p.grad[:, None, None] * grad
 
-        return p.attach(backward_fn, {x})
+        return p.attach(gradient_fn, {x})
 
     def load_reference(self, filename):
         if os.path.isfile(filename):
             data = np.load(filename, allow_pickle=False)
-            for i, p in enumerate(self.reference.parameters()):
+            for i, p in enumerate(self.reference.parameters):
                 p.data = data[f"param_{i}"].astype(p.dtype)
                 p.grad = np.zeros_like(p.data)

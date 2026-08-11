@@ -33,13 +33,12 @@ class Dataset(ABC):
         return Tensor(x), Tensor(y)
 
     def __len__(self):
-        x, y = self.data
-        return math.ceil(len(x) / self.batch_size)
+        return math.ceil(len(self.data[0]) / self.batch_size)
 
     def __getitem__(self, index):
         s = self._slice(index)
         x, y = self.data
-        return Tensor(x[s]), Tensor(y[s])
+        return Tensor(self.data[0][s]), Tensor(self.data[1][s])
 
     def _slice(self, index):
         return slice(index * self.batch_size, (index + 1) * self.batch_size)

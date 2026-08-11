@@ -3,7 +3,7 @@
 sequence side by side."""
 
 from src.core.tensor import Tensor
-from src.sft.sft_dataset import SFTDataset
+from src.gpt.sft_dataset import SFTDataset
 
 
 class DPODataset(SFTDataset):

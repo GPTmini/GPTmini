@@ -7,19 +7,19 @@ import numpy as np
 import requests
 
 from src.config import *
-from src.dpo.dpo_dataset import DPODataset
-from src.dpo.dpo_loss import DPOLoss
-from src.dpo.dpo_model import DPOModel
+from src.core.lr_scheduler import WarmupCosineScheduler
+from src.core.optimizer import AdamWOptimizer
+from src.gpt.dpo_dataset import DPODataset
+from src.gpt.dpo_loss import DPOLoss
+from src.gpt.dpo_model import DPOModel
 from src.gpt.gpt import GPT
 from src.gpt.gpt_dataset import GPTDataset
 from src.gpt.gpt_loss import GPTLoss
 from src.gpt.gpt_model import GPTModel
-from src.gpt.lr_scheduler import WarmupCosineScheduler
-from src.gpt.optimizer import AdamWOptimizer
+from src.gpt.sft_dataset import SFTDataset
+from src.gpt.sft_loss import SFTLoss
+from src.gpt.sft_model import SFTModel
 from src.sample import dpo_sample, sft_sample
-from src.sft.sft_dataset import SFTDataset
-from src.sft.sft_loss import SFTLoss
-from src.sft.sft_model import SFTModel
 
 
 def gpt_train():
@@ -37,9 +37,9 @@ def gpt_train():
 
     layer = GPT(dataset.vocab_size, CONTEXT_SIZE, EMBEDDING_SIZE, HEADS, BLOCKS, DROPOUT)
     loss_fn = GPTLoss()
-    optimizer = AdamWOptimizer(layer.parameters(), lr=GPT_MAX_LR)
+    optimizer = AdamWOptimizer(layer.parameters, lr=GPT_MAX_LR)
     model = GPTModel(GPT_MODEL, layer, loss_fn, optimizer)  # resumes from GPT_MODEL if it exists
-    print(f"Model: parameters={sum(p.data.size for p in layer.parameters())}, resumed at step {model.steps}")
+    print(f"Model: parameters={sum(p.data.size for p in layer.parameters)}, resumed at step {model.steps}")
 
     scheduler = WarmupCosineScheduler(GPT_MAX_LR, model.steps + EPOCHS * len(dataset), GPT_WARMUP_STEPS, GPT_MIN_LR)
     model.train(dataset, EPOCHS, scheduler=scheduler, prompt=PROMPT)
@@ -50,7 +50,7 @@ def sft_train():
     dataset = GPTDataset(DATA_FILE, 1, CONTEXT_SIZE)
     layer = GPT(dataset.vocab_size, CONTEXT_SIZE, EMBEDDING_SIZE, HEADS, BLOCKS, DROPOUT)
     loss_fn = SFTLoss()
-    optimizer = AdamWOptimizer(layer.parameters(), lr=SFT_MAX_LR)
+    optimizer = AdamWOptimizer(layer.parameters, lr=SFT_MAX_LR)
     model = SFTModel(GPT_MODEL, layer, loss_fn, optimizer)  # start from the pretrained checkpoint
     model.filename = SFT_MODEL  # but save to a different file
     model.steps = 0  # reset step count; this is a fresh training stage, not a resume
@@ -69,7 +69,7 @@ def dpo_train():
     layer = GPT(dataset.vocab_size, CONTEXT_SIZE, EMBEDDING_SIZE, HEADS, BLOCKS, DROPOUT)
     reference = GPT(dataset.vocab_size, CONTEXT_SIZE, EMBEDDING_SIZE, HEADS, BLOCKS, DROPOUT)
     loss_fn = DPOLoss()
-    optimizer = AdamWOptimizer(layer.parameters(), lr=DPO_MAX_LR)
+    optimizer = AdamWOptimizer(layer.parameters, lr=DPO_MAX_LR)
     model = DPOModel(SFT_MODEL, layer, loss_fn, optimizer, reference)  # policy + reference both start from SFT
     model.filename = DPO_MODEL
     model.steps = 0  # reset step count; this is a fresh training stage, not a resume

@@ -16,10 +16,10 @@ class GPTLoss(Loss):
         picked = np.clip(flat_softmax[np.arange(flat_y.shape[0]), flat_y], 1e-10, 1)
         ce = Tensor(-np.mean(np.log(picked)))
 
-        def backward_fn():
+        def gradient_fn():
             # softmax+CE gradient: subtract 1 at the target class, then average over all positions
             flat_grad = flat_softmax.copy()
             flat_grad[np.arange(flat_y.shape[0]), flat_y] -= 1
             p.grad += ce.grad * flat_grad.reshape(softmax.shape) / flat_y.shape[0]
 
-        return ce.attach(backward_fn, {p})
+        return ce.attach(gradient_fn, {p})

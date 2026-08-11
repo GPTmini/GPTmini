@@ -4,11 +4,11 @@ weight-tied output projection back to vocab logits."""
 
 import numpy as np
 
+from src.core.activation import GELU, Tril
 from src.core.activation import Softmax
 from src.core.layer import Composite, Dropout, Embedding, Linear
+from src.core.layer import LayerNorm
 from src.core.tensor import DTYPE, Tensor
-from src.gpt.activation import GELU, Tril
-from src.gpt.layer import LayerNorm
 
 
 class GPTEmbedding(Composite):
@@ -111,7 +111,7 @@ class GPTTransformer(Composite):
 class GPTOutput(Composite):
     """Final projection to vocab logits. Reuses (ties) the input token
     embedding as the output weight matrix, saving params and often improving
-    quality; the tied weight is NOT re-added to parameters() here since the
+    quality; the tied weight is NOT re-added to parameters here since the
     embedding layer already registers it."""
 
     def __init__(self, vocab_size, embedding_size, token_embedding: Embedding):
@@ -125,17 +125,18 @@ class GPTOutput(Composite):
         norm = self.normalize(x)
         p = Tensor(norm.data @ self.weight.data.T + self.bias.data)
 
-        def backward_fn():
+        def gradient_fn():
             grad = p.grad.reshape(-1, p.grad.shape[-1])
             self.weight.grad += grad.T @ norm.data.reshape(-1, norm.shape[-1])
             self.bias.grad += np.sum(grad, axis=0)
             norm.grad += p.grad @ self.weight.data
 
-        return p.attach(backward_fn, {self.weight, self.bias, norm})
+        return p.attach(gradient_fn, {self.weight, self.bias, norm})
 
+    @property
     def parameters(self):
         # only bias here; self.weight is already owned by the token embedding layer
-        return super().parameters() + [self.bias]
+        return super().parameters + [self.bias]
 
 
 class GPT(Composite):

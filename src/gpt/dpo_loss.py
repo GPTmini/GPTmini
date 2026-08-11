@@ -22,10 +22,10 @@ class DPOLoss(Loss):
         sig = 1.0 / (1.0 + np.exp(-margin))
         e = Tensor(-np.sum(np.log(np.clip(sig, 1e-10, 1.0))) / pc.shape[0])
 
-        def backward_fn():
+        def gradient_fn():
             # d(-log sigmoid(margin))/d(margin) = sigmoid(margin) - 1
             common = (sig - 1.0) / pc.shape[0] * self.beta * e.grad
             pc.grad += common
             pr.grad += -common
 
-        return e.attach(backward_fn, {pc, pr})
+        return e.attach(gradient_fn, {pc, pr})

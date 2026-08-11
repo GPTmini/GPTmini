@@ -108,7 +108,7 @@ class GPTModel(Model):
 
     def save(self, filename):
         """Single npz file holding architecture config, params, optimizer state, and step count."""
-        params = {f"param_{i}": p.data for i, p in enumerate(self.layer.parameters())}
+        params = {f"param_{i}": p.data for i, p in enumerate(self.layer.parameters)}
         states = {f"optimizer_{k}": v for k, v in self.optimizer.states().items()}
         np.savez(filename, config=json.dumps(self.layer.config), steps=self.steps, **params, **states)
 
@@ -117,7 +117,7 @@ class GPTModel(Model):
             data = np.load(filename, allow_pickle=False)
             self.steps = int(data["steps"]) if "steps" in data else 0
 
-            for i, p in enumerate(self.layer.parameters()):
+            for i, p in enumerate(self.layer.parameters):
                 p.data = data[f"param_{i}"].astype(p.dtype)
                 p.grad = np.zeros_like(p.data)
 
