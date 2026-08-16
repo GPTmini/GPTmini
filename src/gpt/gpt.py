@@ -47,8 +47,7 @@ def gpt_train():
 
 def gpt_test(model, dataset):
     prediction, loss = model.test(dataset)
-    print(f'prediction: {len(prediction)} steps, each {prediction[0].shape}')
-    print(f'loss: {loss}')
+    print(f'prediction:\t{len(prediction)} steps, each {prediction[0].data.shape}\nloss:\t{loss}')
 
 
 def gpt_generate(model, dataset):
