@@ -1,5 +1,3 @@
-"""Base Model: bundles a layer, loss function, and optimizer into one trainer."""
-
 from abc import ABC, abstractmethod
 
 
@@ -11,9 +9,9 @@ class Model(ABC):
         self.optimizer = optimizer
 
     @abstractmethod
-    def train(self, dataset, epochs):
+    def train(self, dataset, epochs, scheduler=None):
         pass
 
     @abstractmethod
-    def evaluate(self, dataset):
+    def test(self, dataset):
         pass

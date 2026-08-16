@@ -1,5 +1,3 @@
-"""Learning-rate schedules."""
-
 import math
 from abc import ABC, abstractmethod
 
@@ -8,11 +6,10 @@ class LRScheduler(ABC):
 
     @abstractmethod
     def step(self, step):
-        """Return the learning rate for the given global step."""
+        pass
 
 
 class WarmupCosineScheduler(LRScheduler):
-    """Linear warmup to max_lr, then cosine decay down to min_lr."""
 
     def __init__(self, max_lr, total_steps, warmup_steps, min_lr=0.0):
         self.max_lr = max_lr
