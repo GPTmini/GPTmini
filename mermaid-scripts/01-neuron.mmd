@@ -1,0 +1,13 @@
+flowchart LR
+    classDef in fill:#E3F2FD,stroke:#2196F3,stroke-width:2px;
+    classDef model fill:#FFF9C4,stroke:#FBC02D,stroke-width:2px;
+    classDef data fill:#E1BEE7,stroke:#9C27B0,stroke-width:2px;
+    classDef test fill:#F8BBD0,stroke:#E91E63,stroke-width:2px;
+    classDef out fill:#DCEDC8,stroke:#8BC34A,stroke-width:2px;
+    classDef skip stroke:#B0BEC5,stroke-width:2px,stroke-dasharray: 5 5;
+
+    X1((x<sub>1</sub>)):::in --> M1[*]:::model --> W1[[w<sub>1</sub>]]:::model
+    X2((x<sub>2</sub>)):::in --> M2[*]:::model --> W2[[w<sub>2</sub>]]:::model
+
+    W1 --> S[Σ]:::model --> A{"f(x)"}:::test --> P((p)):::out
+    W2 --> S

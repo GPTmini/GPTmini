@@ -1,0 +1,17 @@
+flowchart LR
+    classDef in fill:#E3F2FD,stroke:#2196F3,stroke-width:2px;
+    classDef model fill:#FFF9C4,stroke:#FBC02D,stroke-width:2px;
+    classDef data fill:#E1BEE7,stroke:#9C27B0,stroke-width:2px;
+    classDef test fill:#F8BBD0,stroke:#E91E63,stroke-width:2px;
+    classDef out fill:#DCEDC8,stroke:#8BC34A,stroke-width:2px;
+    classDef skip stroke:#B0BEC5,stroke-width:2px,stroke-dasharray: 5 5;
+
+    X1((x<sub>1</sub>)):::in --> H1["H<sub>1</sub>"]:::model --> M1((h<sub>1</sub>)):::data --> O["O"]:::model --> P((p)):::out
+    X1 --> H2["H<sub>2</sub>"]:::model --> M2((h<sub>2</sub>)):::data --> O
+    X1 --> H3["H<sub>3</sub>"]:::model --> M3((h<sub>3</sub>)):::data --> O
+    X1 --> H4["H<sub>4</sub>"]:::model --> M4((h<sub>4</sub>)):::data --> O
+
+    X2((x<sub>2</sub>)):::in --> H1
+    X2 --> H2
+    X2 --> H3
+    X2 --> H4
