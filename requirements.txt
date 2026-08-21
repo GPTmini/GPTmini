@@ -1,2 +1,4 @@
+jupyter-book
 numpy
+matplotlib
 requests
