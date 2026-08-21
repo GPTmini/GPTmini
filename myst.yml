@@ -1,7 +1,7 @@
 version: 1
 project:
   id: 2ff361ef-200a-4e6a-be05-725c77a3866d
-  title: 从零开始 GPT
+  title: 从零开始GPT
   authors:
     - name: 李晓光（Steve Li）
       # orcid: https://orcid.org/0000-0002-8713-2343
