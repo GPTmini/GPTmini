@@ -19,6 +19,7 @@ project:
             - file: tutorial/zh/artificial-neural-network/01-multilayer-perceptron/02-mse-loss.ipynb
             - file: tutorial/zh/artificial-neural-network/01-multilayer-perceptron/03-gradient-descent.ipynb
             - file: tutorial/zh/artificial-neural-network/01-multilayer-perceptron/04-autograd.ipynb
+            - file: tutorial/zh/artificial-neural-network/01-multilayer-perceptron/05-learning-rate.ipynb
 site:
   template: book-theme
   options:
