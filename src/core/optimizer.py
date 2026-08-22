@@ -29,7 +29,7 @@ class AdamOptimizer(Optimizer):
 
     def __init__(self, parameters, lr=0.01, betas=(0.9, 0.999), eps=1e-8):
         super().__init__(parameters, lr)
-        self.beta1, self.beta2 = betas
+        self.b1, self.b2 = betas
         self.eps = eps
         self.m = [None] * len(parameters)
         self.v = [None] * len(parameters)
@@ -37,18 +37,18 @@ class AdamOptimizer(Optimizer):
 
     def step(self):
         self.t += 1
-        for idx, p in enumerate(self.parameters):
+        for i, p in enumerate(self.parameters):
             if p is not None:
-                if self.m[idx] is None:
-                    self.m[idx] = np.zeros_like(p.data)
-                    self.v[idx] = np.zeros_like(p.data)
+                if self.m[i] is None:
+                    self.m[i] = np.zeros_like(p.data)
+                    self.v[i] = np.zeros_like(p.data)
 
-                self.m[idx] = self.beta1 * self.m[idx] + (1 - self.beta1) * p.grad
-                self.v[idx] = self.beta2 * self.v[idx] + (1 - self.beta2) * (p.grad ** 2)
-                m_hat = self.m[idx] / (1 - self.beta1 ** self.t)
-                v_hat = self.v[idx] / (1 - self.beta2 ** self.t)
+                self.m[i] = self.b1 * self.m[i] + (1 - self.b1) * p.grad
+                self.v[i] = self.b2 * self.v[i] + (1 - self.b2) * (p.grad ** 2)
+                m = self.m[i] / (1 - self.b1 ** self.t)
+                v = self.v[i] / (1 - self.b2 ** self.t)
                 self._apply_weight_decay(p)
-                p.data -= self.lr * m_hat / (np.sqrt(v_hat) + self.eps)
+                p.data -= self.lr * m / (np.sqrt(v) + self.eps)
 
     def _apply_weight_decay(self, p):
         pass
