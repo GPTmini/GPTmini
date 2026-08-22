@@ -36,8 +36,26 @@ project:
       children:
         - title: 编码器
           children:
-            - file: tutorial/zh/large-language-model/01-tokenizer/01-position-embedding.ipynb
-            - file: tutorial/zh/large-language-model/01-tokenizer/02-token-embedding.ipynb
+            - file: tutorial/zh/large-language-model/01-tokenizer/01-token-embedding.ipynb
+            - file: tutorial/zh/large-language-model/01-tokenizer/02-position-embedding.ipynb
+        - title: 自注意力机制
+          children:
+            - file: tutorial/zh/large-language-model/02-attention/03-self-attention.ipynb
+            - file: tutorial/zh/large-language-model/02-attention/04-causal-attention.ipynb
+            - file: tutorial/zh/large-language-model/02-attention/05-weighted-attention.ipynb
+            - file: tutorial/zh/large-language-model/02-attention/06-multihead-attention.ipynb
+        - title: 预训练
+          children:
+            - file: tutorial/zh/large-language-model/03-pre-training/07-shortcut-connect.ipynb
+            - file: tutorial/zh/large-language-model/03-pre-training/08-normalize.ipynb
+            - file: tutorial/zh/large-language-model/03-pre-training/09-dropout.ipynb
+            - file: tutorial/zh/large-language-model/03-pre-training/10-persistance.ipynb
+        - title: 微调
+          children:
+            - file: tutorial/zh/large-language-model/04-fine-tuning/11-sft-sample.ipynb
+            - file: tutorial/zh/large-language-model/04-fine-tuning/12-sft.ipynb
+            - file: tutorial/zh/large-language-model/04-fine-tuning/13-dpo-sample.ipynb
+            - file: tutorial/zh/large-language-model/04-fine-tuning/14-dpo.ipynb
 site:
   template: book-theme
   options:
