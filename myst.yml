@@ -32,6 +32,12 @@ project:
             - file: tutorial/zh/artificial-neural-network/02-recurrent-neural-network/13-adam-optimizer.ipynb
             - file: tutorial/zh/artificial-neural-network/02-recurrent-neural-network/14-learning-rate-scheduler.ipynb
         - file: tutorial/zh/artificial-neural-network/03-core-framework.ipynb
+    - title: 大语言模型
+      children:
+        - title: 编码器
+          children:
+            - file: tutorial/zh/large-language-model/01-tokenizer/01-position-embedding.ipynb
+            - file: tutorial/zh/large-language-model/01-tokenizer/02-token-embedding.ipynb
 site:
   template: book-theme
   options:
