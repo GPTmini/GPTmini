@@ -56,6 +56,7 @@ project:
             - file: tutorial/zh/large-language-model/04-fine-tuning/12-sft.ipynb
             - file: tutorial/zh/large-language-model/04-fine-tuning/13-dpo-sample.ipynb
             - file: tutorial/zh/large-language-model/04-fine-tuning/14-dpo.ipynb
+        - file: tutorial/zh/large-language-model/05-next-step.ipynb
 site:
   template: book-theme
   options:
