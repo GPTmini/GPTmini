@@ -20,6 +20,18 @@ project:
             - file: tutorial/zh/artificial-neural-network/01-multilayer-perceptron/03-gradient-descent.ipynb
             - file: tutorial/zh/artificial-neural-network/01-multilayer-perceptron/04-autograd.ipynb
             - file: tutorial/zh/artificial-neural-network/01-multilayer-perceptron/05-learning-rate.ipynb
+            - file: tutorial/zh/artificial-neural-network/01-multilayer-perceptron/06-iteration.ipynb
+            - file: tutorial/zh/artificial-neural-network/01-multilayer-perceptron/07-hidden-layer.ipynb
+            - file: tutorial/zh/artificial-neural-network/01-multilayer-perceptron/08-activation-functions.ipynb
+        - title: 循环神经网络
+          children:
+            - file: tutorial/zh/artificial-neural-network/02-recurrent-neural-network/09-encoding.ipynb
+            - file: tutorial/zh/artificial-neural-network/02-recurrent-neural-network/10-embedding.ipynb
+            - file: tutorial/zh/artificial-neural-network/02-recurrent-neural-network/11-cross-entropy-loss.ipynb
+            - file: tutorial/zh/artificial-neural-network/02-recurrent-neural-network/12-recurrent.ipynb
+            - file: tutorial/zh/artificial-neural-network/02-recurrent-neural-network/13-adam-optimizer.ipynb
+            - file: tutorial/zh/artificial-neural-network/02-recurrent-neural-network/14-learning-rate-scheduler.ipynb
+        - file: tutorial/zh/artificial-neural-network/03-core-framework.ipynb
 site:
   template: book-theme
   options:
