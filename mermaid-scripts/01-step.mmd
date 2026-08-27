@@ -1,4 +1,4 @@
-flowchart LR
+flowchart RL
     classDef in fill:#E3F2FD,stroke:#2196F3,stroke-width:2px;
     classDef model fill:#FFF9C4,stroke:#FBC02D,stroke-width:2px;
     classDef data fill:#E1BEE7,stroke:#9C27B0,stroke-width:2px;
@@ -7,4 +7,4 @@ flowchart LR
     classDef skip stroke:#B0BEC5,stroke-width:2px,stroke-dasharray: 5 5;
 
     d((d)):::data --> B["optimizer.step()"]:::model --> W[[w, b]]:::model
-    x((x)):::data --> B
+    x((x)):::in --> B
