@@ -6,5 +6,7 @@ flowchart RL
     classDef out fill:#DCEDC8,stroke:#8BC34A,stroke-width:2px;
     classDef skip stroke:#B0BEC5,stroke-width:2px,stroke-dasharray: 5 5;
 
-    P((p)):::out --> G["loss.backward()"]:::model --> g((g)):::data
-    Y((y)):::in --> G
+    P((p)):::out --> G1["loss.backward()"]:::model --> og((g<sub>2</sub>)):::data
+    og --> G2["layer<sub>2</sub>.backward()"]:::model --> hg((g<sub>1</sub>)):::data
+    Y((y)):::in --> G1
+    W2[[w<sub>2</sub>]]:::model --> G2
