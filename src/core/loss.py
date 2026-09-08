@@ -37,7 +37,7 @@ class CELoss(Loss):
         else:
             labels = np.zeros_like(softmax)
             rows = np.arange(y.data.size)
-            labels[rows, y.data] = 1
+            labels[rows, y.data.astype(np.int64)] = 1
 
         log = np.log(np.clip(softmax, 1e-10, 1.0))
         ce = Tensor(-np.mean(np.sum(labels * log, axis=-1)))
