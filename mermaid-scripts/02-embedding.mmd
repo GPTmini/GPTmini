@@ -1,0 +1,137 @@
+block-beta
+classDef transparent fill:white,stroke:white
+classDef in fill:#E3F2FD,stroke:#2196F3,stroke-width:2px;
+classDef model fill:#FFF9C4,stroke:#FBC02D,stroke-width:2px;
+classDef data fill:#E1BEE7,stroke:#9C27B0,stroke-width:2px;
+classDef test fill:#F8BBD0,stroke:#E91E63,stroke-width:2px;
+classDef out fill:#DCEDC8,stroke:#8BC34A,stroke-width:2px;
+classDef skip stroke:#B0BEC5,stroke-width:2px,stroke-dasharray: 5 5;
+columns 10
+block:word:10
+    columns 10
+    space
+    w1["B"]
+    space
+    space
+    w2["E"]
+    space
+    space
+    space
+    w3["I"]
+    space
+end
+block:a1:10
+    columns 10
+    space
+    arrow11<["&nbsp;"]>(down)
+    space
+    space
+    arrow12<["&nbsp;"]>(down)
+    space
+    space
+    space
+    arrow13<["&nbsp;"]>(down)
+    space
+end
+block:index:10
+    columns 10
+    space
+    i1["1"]
+    space
+    space
+    i2["4"]
+    space
+    space
+    space
+    i3["8"]
+    space
+end
+block:a2:10
+    columns 10
+    space
+    arrow21<["&nbsp;"]>(down)
+    space
+    space
+    arrow22<["&nbsp;"]>(down)
+    space
+    space
+    space
+    arrow23<["&nbsp;"]>(down)
+    space
+end
+block:onehot:10
+    columns 10
+    h0["0"]
+    h1["1"]
+    h2["0"]
+    h3["0"]
+    h4["1"]
+    h5["0"]
+    h6["0"]
+    h7["0"]
+    h8["1"]
+    h9["0"]
+end
+block:a3:10
+    columns 10
+    space
+    arrow31<["&nbsp;"]>(down)
+    space
+    space
+    arrow32<["&nbsp;"]>(down)
+    space
+    space
+    space
+    arrow33<["&nbsp;"]>(down)
+    space
+end
+block:weight1:10
+    columns 10
+    w10["w"]
+    w11["w"]
+    w12["w"]
+    w13["w"]
+    w14["w"]
+    w15["w"]
+    w16["w"]
+    w17["w"]
+    w18["w"]
+    w19["w"]
+end
+block:weight2:10
+    columns 10
+    w20["w"]
+    w21["w"]
+    w22["w"]
+    w23["w"]
+    w24["w"]
+    w25["w"]
+    w26["w"]
+    w27["w"]
+    w28["w"]
+    w29["w"]
+end
+block:weight3:10
+    columns 10
+    w30["w"]
+    w31["w"]
+    w32["w"]
+    w33["w"]
+    w34["w"]
+    w35["w"]
+    w36["w"]
+    w37["w"]
+    w38["w"]
+    w39["w"]
+end
+
+
+class w1,w2,w3 in
+class i1,i2,i3 data
+class h1,h4,h8 test
+class h0,h2,h3,h5,h6,h7,h9 skip
+class w10,w12,w13,w15,w16,w17,w19 model
+class w20,w22,w23,w25,w26,w27,w29 model
+class w30,w32,w33,w35,w36,w37,w39 model
+class w11,w21,w31,w14,w24,w34,w18,w28,w38 out
+class word,a1,index,a2,onehot,a3,weight1,weight2,weight3 transparent
