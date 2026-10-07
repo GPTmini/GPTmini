@@ -2,7 +2,7 @@ import os
 
 import numpy as np
 
-from src.core import Layer, Tensor, DTYPE, Composite, Embedding, Linear, Softmax, Model
+from src.core import Layer, Tensor, DTYPE, Composite, Embedding, Linear, Softmax, Trainer
 
 
 class GELU(Layer):
@@ -209,7 +209,7 @@ class GPT(Composite):
         return self.output(x)
 
 
-class GPTModel(Model):
+class GPTTrainer(Trainer):
 
     def train(self, dataset, epochs, scheduler=None, filename=None):
         dataset.train()

@@ -9,7 +9,7 @@ from src.gpt import CharDataset, GPT
 from src.gpt.gpt import DATA_FILE, CONTEXT_SIZE, BATCH_SIZE, EMBEDDING_SIZE, HEADS, BLOCKS, MODEL_FILE
 from src.sft.sft_dataset import SFTDataset
 from src.sft.sft_loss import SFTLoss
-from src.sft.sft_model import SFTModel
+from src.sft.sft_trainer import SFTTrainer
 
 np.random.seed(42)
 
@@ -70,16 +70,16 @@ def sft_sample():
 
 def sft_train():
     dataset = CharDataset(DATA_FILE, BATCH_SIZE, CONTEXT_SIZE)
-    layer = GPT(dataset.vocab_size, CONTEXT_SIZE, EMBEDDING_SIZE, HEADS, BLOCKS)
+    model = GPT(dataset.vocab_size, CONTEXT_SIZE, EMBEDDING_SIZE, HEADS, BLOCKS)
     loss_fn = SFTLoss()
-    optimizer = AdamWOptimizer(layer.parameters, lr=SFT_MAX_LR)
-    model = SFTModel(layer, loss_fn, optimizer)
-    model.load(MODEL_FILE)
+    optimizer = AdamWOptimizer(model.parameters, lr=SFT_MAX_LR)
+    trainer = SFTTrainer(model, loss_fn, optimizer)
+    trainer.load(MODEL_FILE)
 
     sft_dataset = SFTDataset(SFT_SAMPLES, CONTEXT_SIZE)
     scheduler = WarmupCosineScheduler(SFT_MAX_LR, len(sft_dataset), SFT_WARMUP_STEPS, SFT_MIN_LR)
-    model.train(sft_dataset, 1, scheduler, SFT_MODEL)
-    return model, dataset
+    trainer.train(sft_dataset, 1, scheduler, SFT_MODEL)
+    return trainer, dataset
 
 
 def sft_generate(model, dataset):
@@ -88,5 +88,5 @@ def sft_generate(model, dataset):
 
 if __name__ == "__main__":
     sft_sample()
-    model, dataset = sft_train()
-    sft_generate(model, dataset)
+    trainer, dataset = sft_train()
+    sft_generate(trainer, dataset)

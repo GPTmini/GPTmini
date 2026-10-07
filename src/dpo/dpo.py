@@ -6,8 +6,8 @@ import numpy as np
 from src.core import WarmupCosineScheduler, AdamWOptimizer, Tensor
 from src.dpo.dpo_dataset import DPODataset
 from src.dpo.dpo_loss import DPOLoss
-from src.dpo.dpo_model import DPOModel
-from src.gpt import CharDataset, GPT, GPTModel
+from src.dpo.dpo_trainer import DPOTrainer
+from src.gpt import CharDataset, GPT, GPTTrainer
 from src.gpt.gpt import CONTEXT_SIZE, MODEL_FILE, EMBEDDING_SIZE, HEADS, BLOCKS, BATCH_SIZE, DATA_FILE
 from src.sft.sft import extract_turns
 
@@ -46,10 +46,10 @@ def generate_rejected_batch(layer, prompts, lens, pad_token=0, temperature=0.8, 
 def dpo_sample():
     dataset = CharDataset(DATA_FILE, BATCH_SIZE, CONTEXT_SIZE)
 
-    layer = GPT(dataset.vocab_size, CONTEXT_SIZE, EMBEDDING_SIZE, HEADS, BLOCKS)
-    model = GPTModel(layer, None, None)
-    model.load(MODEL_FILE)
-    layer.eval()
+    model = GPT(dataset.vocab_size, CONTEXT_SIZE, EMBEDDING_SIZE, HEADS, BLOCKS)
+    trainer = GPTTrainer(model, None, None)
+    trainer.load(MODEL_FILE)
+    model.eval()
 
     pairs = list(pairwise(extract_turns()))
     np.random.shuffle(pairs)
@@ -63,7 +63,7 @@ def dpo_sample():
         chosen_tokens = [dataset.encode(f"{b}:\n{t}\n") for (_, _), (b, t) in chunk]
 
         lens = [len(c) for c in chosen_tokens]
-        rejected_tokens = generate_rejected_batch(layer, prompt_tokens, lens)
+        rejected_tokens = generate_rejected_batch(model, prompt_tokens, lens)
 
         for p, c, r in zip(prompt_tokens, chosen_tokens, rejected_tokens):
             if len(r) == 0 or r == c:
@@ -82,18 +82,18 @@ def dpo_sample():
 
 def dpo_train():
     dataset = CharDataset(DATA_FILE, BATCH_SIZE, CONTEXT_SIZE)
-    layer = GPT(dataset.vocab_size, CONTEXT_SIZE, EMBEDDING_SIZE, HEADS, BLOCKS)
+    model = GPT(dataset.vocab_size, CONTEXT_SIZE, EMBEDDING_SIZE, HEADS, BLOCKS)
     reference = GPT(dataset.vocab_size, CONTEXT_SIZE, EMBEDDING_SIZE, HEADS, BLOCKS)
     loss_fn = DPOLoss()
-    optimizer = AdamWOptimizer(layer.parameters, lr=DPO_MAX_LR)
-    model = DPOModel(layer, loss_fn, optimizer, reference)
-    model.load(MODEL_FILE)
-    model.load_reference(MODEL_FILE)
+    optimizer = AdamWOptimizer(model.parameters, lr=DPO_MAX_LR)
+    trainer = DPOTrainer(model, loss_fn, optimizer, reference)
+    trainer.load(MODEL_FILE)
+    trainer.load_reference(MODEL_FILE)
 
     dpo_dataset = DPODataset(DPO_SAMPLES, CONTEXT_SIZE)
     scheduler = WarmupCosineScheduler(DPO_MAX_LR, len(dpo_dataset), DPO_WARMUP_STEPS, DPO_MIN_LR)
-    model.train(dpo_dataset, 1, scheduler, DPO_MODEL)
-    return model, dataset
+    trainer.train(dpo_dataset, 1, scheduler, DPO_MODEL)
+    return trainer, dataset
 
 
 def dpo_generate(model, dataset):
@@ -102,5 +102,5 @@ def dpo_generate(model, dataset):
 
 if __name__ == "__main__":
     dpo_sample()
-    model, dataset = dpo_train()
-    dpo_generate(model, dataset)
+    trainer, dataset = dpo_train()
+    dpo_generate(trainer, dataset)

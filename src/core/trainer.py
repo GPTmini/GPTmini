@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
 
-class Model(ABC):
+class Trainer(ABC):
 
     def __init__(self, layer, loss_fn, optimizer):
         self.layer = layer

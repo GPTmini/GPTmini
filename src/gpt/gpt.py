@@ -4,7 +4,7 @@ import numpy as np
 import requests
 
 from src.core import AdamWOptimizer, WarmupCosineScheduler
-from src.gpt import CharDataset, GPT, GPTModel, GPTLoss
+from src.gpt import CharDataset, GPT, GPTTrainer, GPTLoss
 
 np.random.seed(42)
 
@@ -35,14 +35,14 @@ def download_file():
 
 def gpt_train():
     dataset = CharDataset(DATA_FILE, BATCH_SIZE, CONTEXT_SIZE)
-    layer = GPT(dataset.vocab_size, CONTEXT_SIZE, EMBEDDING_SIZE, HEADS, BLOCKS)
+    model = GPT(dataset.vocab_size, CONTEXT_SIZE, EMBEDDING_SIZE, HEADS, BLOCKS)
     loss_fn = GPTLoss()
-    optimizer = AdamWOptimizer(layer.parameters, lr=GPT_MAX_LR)
-    model = GPTModel(layer, loss_fn, optimizer)
+    optimizer = AdamWOptimizer(model.parameters, lr=GPT_MAX_LR)
+    trainer = GPTTrainer(model, loss_fn, optimizer)
 
     scheduler = WarmupCosineScheduler(GPT_MAX_LR, EPOCHS * len(dataset), GPT_WARMUP_STEPS, GPT_MIN_LR)
-    model.train(dataset, EPOCHS, scheduler, MODEL_FILE)
-    return model, dataset
+    trainer.train(dataset, EPOCHS, scheduler, MODEL_FILE)
+    return trainer, dataset
 
 
 def gpt_test(model, dataset):
@@ -56,6 +56,6 @@ def gpt_generate(model, dataset):
 
 if __name__ == "__main__":
     download_file()
-    model, dataset = gpt_train()
-    gpt_test(model, dataset)
-    gpt_generate(model, dataset)
+    trainer, dataset = gpt_train()
+    gpt_test(trainer, dataset)
+    gpt_generate(trainer, dataset)

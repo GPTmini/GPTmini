@@ -1,9 +1,9 @@
 import numpy as np
 
-from src.gpt import GPTModel
+from src.gpt import GPTTrainer
 
 
-class SFTModel(GPTModel):
+class SFTTrainer(GPTTrainer):
 
     def train(self, dataset, epochs, scheduler=None, filename=None):
         self.layer.train()

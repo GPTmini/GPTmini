@@ -3,10 +3,10 @@ import os
 import numpy as np
 
 from src.core import Tensor
-from src.gpt import GPTModel
+from src.gpt import GPTTrainer
 
 
-class DPOModel(GPTModel):
+class DPOTrainer(GPTTrainer):
 
     def __init__(self, layer, loss_fn, optimizer, reference):
         super().__init__(layer, loss_fn, optimizer)
