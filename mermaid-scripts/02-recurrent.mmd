@@ -6,8 +6,15 @@ flowchart LR
     classDef test fill:#F8BBD0,stroke:#E91E63,stroke-width:2px;
     classDef out fill:#DCEDC8,stroke:#8BC34A,stroke-width:2px;
     classDef skip stroke:#B0BEC5,stroke-width:2px,stroke-dasharray: 5 5;
+
+    subgraph cell
+        Hidden
+        C
+        Tanh
+        Input
+    end
     
-    Ht((h)):::test -.-> C{+}:::model -.-> Hidden[[w]]:::model -.-> Tanh[tanh]:::model -.-> Ht1((h)):::test
-    Xt((x)):::in --> Embedding[embedding]:::model --> C 
-    Tanh --> Output[[w]]:::model --> Softmax[softmax]:::model --> Pt1((p)):::out
+    Ht((h)):::test -.-> Hidden[[hidden]]:::data --> C{+}:::data --> Tanh[tanh]:::data --> Ht1((h)):::test
+    Xt((x)):::in --> Embedding[embedding]:::model --> Input[[input]]:::data --> C
+    Tanh --> Output[[output]]:::model --> Softmax[softmax]:::model --> Pt1((p)):::out
     
