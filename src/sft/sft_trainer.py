@@ -6,7 +6,7 @@ from src.gpt import GPTTrainer
 class SFTTrainer(GPTTrainer):
 
     def train(self, dataset, epochs, scheduler=None, filename=None):
-        self.layer.train()
+        self.model.train()
 
         steps = 0
         for epoch in range(epochs):
@@ -19,7 +19,7 @@ class SFTTrainer(GPTTrainer):
                     self.optimizer.lr = scheduler.step(steps)
 
                 feature, label, mask = dataset[i]
-                prediction = self.layer(feature)
+                prediction = self.model(feature)
                 loss = self.loss_fn(prediction, label, mask)
 
                 self.optimizer.zero_grad()

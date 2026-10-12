@@ -3,8 +3,8 @@ from abc import ABC, abstractmethod
 
 class Trainer(ABC):
 
-    def __init__(self, layer, loss_fn, optimizer):
-        self.layer = layer
+    def __init__(self, model, loss_fn, optimizer):
+        self.model = model
         self.loss_fn = loss_fn
         self.optimizer = optimizer
 

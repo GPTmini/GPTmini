@@ -213,7 +213,7 @@ class GPTTrainer(Trainer):
 
     def train(self, dataset, epochs, scheduler=None, filename=None):
         dataset.train()
-        self.layer.train()
+        self.model.train()
 
         steps = 0
         best_losses = float('inf')
@@ -227,7 +227,7 @@ class GPTTrainer(Trainer):
                     self.optimizer.lr = scheduler.step(steps)
 
                 feature, label = dataset[i]
-                prediction = self.layer(feature)
+                prediction = self.model(feature)
                 loss = self.loss_fn(prediction, label)
 
                 self.optimizer.zero_grad()
@@ -253,30 +253,30 @@ class GPTTrainer(Trainer):
 
     def test(self, dataset):
         dataset.eval()
-        self.layer.eval()
+        self.model.eval()
 
         predictions = []
         total_loss = 0.0
         with Tensor.no_grad():
             for i in range(len(dataset)):
                 feature, label = dataset[i]
-                prediction = self.layer(feature)
+                prediction = self.model(feature)
                 loss = self.loss_fn(prediction, label)
                 predictions.append(prediction)
                 total_loss += float(loss.data)
 
         dataset.train()
-        self.layer.train()
+        self.model.train()
         return predictions, total_loss / len(dataset)
 
     def generate(self, dataset, prompt, steps=512):
-        self.layer.eval()
+        self.model.eval()
         tokens = dataset.encode(prompt)
 
         with Tensor.no_grad():
             for _ in range(steps):
                 feature = Tensor([tokens[-dataset.context_size:]])
-                logits = self.layer(feature)
+                logits = self.model(feature)
 
                 last_logits = logits.data[0, -1]
                 exp = np.exp(last_logits - np.max(last_logits))
@@ -287,13 +287,13 @@ class GPTTrainer(Trainer):
         return dataset.decode(tokens)
 
     def save(self, filename):
-        params = {f"param_{i}": p.data for i, p in enumerate(self.layer.parameters)}
+        params = {f"param_{i}": p.data for i, p in enumerate(self.model.parameters)}
         np.savez(filename, **params)
 
     def load(self, filename):
         if os.path.isfile(filename):
             data = np.load(filename, allow_pickle=False)
 
-            for i, p in enumerate(self.layer.parameters):
+            for i, p in enumerate(self.model.parameters):
                 p.data = data[f"param_{i}"]
                 p.grad = np.zeros_like(p.data)

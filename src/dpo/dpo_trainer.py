@@ -8,13 +8,13 @@ from src.gpt import GPTTrainer
 
 class DPOTrainer(GPTTrainer):
 
-    def __init__(self, layer, loss_fn, optimizer, reference):
-        super().__init__(layer, loss_fn, optimizer)
+    def __init__(self, model, loss_fn, optimizer, reference):
+        super().__init__(model, loss_fn, optimizer)
         self.reference = reference
         self.reference.eval()
 
     def train(self, dataset, epochs, scheduler=None, filename=None):
-        self.layer.train()
+        self.model.train()
 
         steps = 0
         for epoch in range(epochs):
@@ -27,8 +27,8 @@ class DPOTrainer(GPTTrainer):
                     self.optimizer.lr = scheduler.step(steps)
 
                 cx, cy, cm, rx, ry, rm = dataset[i]
-                policy_chosen = self._sequence_log_prob(self.layer(cx), cy, cm)
-                policy_rejected = self._sequence_log_prob(self.layer(rx), ry, rm)
+                policy_chosen = self._sequence_log_prob(self.model(cx), cy, cm)
+                policy_rejected = self._sequence_log_prob(self.model(rx), ry, rm)
                 ref_chosen = self._sequence_log_prob(self.reference(cx), cy, cm).data
                 ref_rejected = self._sequence_log_prob(self.reference(rx), ry, rm).data
                 loss = self.loss_fn(policy_chosen, policy_rejected, ref_chosen, ref_rejected)
