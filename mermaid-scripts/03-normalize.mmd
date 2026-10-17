@@ -1,0 +1,30 @@
+%%{init: {'flowchart': {'htmlLabels': true}}}%%
+flowchart TB
+    classDef in fill:#E3F2FD,stroke:#2196F3,stroke-width:2px;
+    classDef model fill:#FFF9C4,stroke:#FBC02D,stroke-width:2px;
+    classDef data fill:#E1BEE7,stroke:#9C27B0,stroke-width:2px;
+    classDef test fill:#F8BBD0,stroke:#E91E63,stroke-width:2px;
+    classDef out fill:#DCEDC8,stroke:#8BC34A,stroke-width:2px;
+    classDef skip stroke:#B0BEC5,stroke-width:2px,stroke-dasharray: 5 5;
+
+    X((x)):::in
+    TE[Token Embedding]:::data
+    PE[Position Embedding]:::data
+    C{+}:::data
+
+    subgraph " "
+        N1[Norm]:::model
+        AT[Attention]:::model
+        C1{+}:::model
+        N2[Norm]:::model
+        FF[Feed Forward]:::model
+        C2{+}:::model
+    end
+
+    N3[Norm]:::test
+    OO[Linear]:::test
+    OS[Softmax]:::test
+    P((p)):::out
+
+    X --> TE --> C --> N1 --> AT --> C1 --> N2 --> FF --> C2 --> N3 --> OO --> OS --> P
+    PE --> C -.-> C1 -.-> C2
