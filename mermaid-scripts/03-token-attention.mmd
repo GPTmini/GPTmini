@@ -1,0 +1,30 @@
+%%{init: {'flowchart': {'htmlLabels': true}}}%%
+block-beta
+    classDef transparent fill:white,stroke:white
+    classDef in fill:#E3F2FD,stroke:#2196F3,stroke-width:0px;
+    classDef model fill:#FFF9C4,stroke:#FBC02D,stroke-width:2px;
+    classDef data fill:#E1BEE7,stroke:#9C27B0,stroke-width:2px;
+    classDef test fill:#F8BBD0,stroke:#E91E63,stroke-width:2px;
+    classDef out fill:#DCEDC8,stroke:#8BC34A,stroke-width:0px;
+    classDef skip stroke:#B0BEC5,stroke-width:2px,stroke-dasharray: 5 5;
+
+    columns 4
+    block:input:4
+        columns 4
+        x1[" "]
+        x2["a"]
+        x3["b"]
+        x4["c"]
+        x5["x"]
+        x6["0.1"]
+        x7["0.5"]
+        x8["0.2"]
+    end
+
+    class x2,x3,x4 in
+    class x5 out
+    class x6 model
+    class x7 test
+    class x8 model
+    class x1 transparent
+    class input transparent
