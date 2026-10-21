@@ -269,7 +269,7 @@ class GPTTrainer(Trainer):
         self.model.train()
         return predictions, total_loss / len(dataset)
 
-    def generate(self, dataset, prompt, steps=512):
+    def generate(self, dataset, prompt, steps=256):
         self.model.eval()
         tokens = dataset.encode(prompt)
 
