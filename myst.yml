@@ -52,18 +52,18 @@ project:
             - file: tutorial/zh/large-language-model/03-pre-training/08-normalize.ipynb
             - file: tutorial/zh/large-language-model/03-pre-training/09-dropout.ipynb
             - file: tutorial/zh/large-language-model/03-pre-training/10-persistance.ipynb
-        - title: 微调
-          children:
-            - file: tutorial/zh/large-language-model/04-fine-tuning/11-sft-sample.ipynb
-            - file: tutorial/zh/large-language-model/04-fine-tuning/12-sft.ipynb
-            - file: tutorial/zh/large-language-model/04-fine-tuning/13-dpo-sample.ipynb
-            - file: tutorial/zh/large-language-model/04-fine-tuning/14-dpo.ipynb
         - title: 推理
           children:
             - file: tutorial/zh/large-language-model/05-inference/15-sampling.ipynb
             - file: tutorial/zh/large-language-model/05-inference/16-stopping-criteria.ipynb
             - file: tutorial/zh/large-language-model/05-inference/17-kv-cache.ipynb
             - file: tutorial/zh/large-language-model/05-inference/18-batch-inference.ipynb
+        - title: 微调
+          children:
+            - file: tutorial/zh/large-language-model/04-fine-tuning/11-sft-sample.ipynb
+            - file: tutorial/zh/large-language-model/04-fine-tuning/12-sft.ipynb
+            - file: tutorial/zh/large-language-model/04-fine-tuning/13-dpo-sample.ipynb
+            - file: tutorial/zh/large-language-model/04-fine-tuning/14-dpo.ipynb
 site:
   template: book-theme
   options:
