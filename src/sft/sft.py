@@ -6,29 +6,30 @@ import numpy as np
 
 from src.core import AdamWOptimizer, WarmupCosineScheduler
 from src.gpt import CharDataset, GPT
-from src.gpt.gpt import DATA_FILE, CONTEXT_SIZE, BATCH_SIZE, EMBEDDING_SIZE, HEADS, BLOCKS, MODEL_FILE
+from src.gpt.gpt import DATA_DIR, DATA_FILE, CONTEXT_SIZE, BATCH_SIZE, EMBEDDING_SIZE, HEADS, BLOCKS, MODEL_FILE
 from src.sft.sft_dataset import SFTDataset
 from src.sft.sft_loss import SFTLoss
 from src.sft.sft_trainer import SFTTrainer
 
 np.random.seed(42)
 
-SFT_SAMPLES = "../sft-samples.pkl"
-SFT_MODEL = "../tinyshakespeare-sft.npz"
+SFT_SAMPLES = str(DATA_DIR / "sft-samples.pkl")
+SFT_MODEL = str(DATA_DIR / "tinyshakespeare-sft.npz")
 
-SFT_MAX_LR = 0.00005
-SFT_MIN_LR = 0.00001
+SFT_MAX_LR = 0.0001
+SFT_MIN_LR = SFT_MAX_LR / 10
 SFT_WARMUP_STEPS = 50
 
 
-def extract_turns(max_turn_chars=100):
-    with open(DATA_FILE, encoding="utf-8") as f:
+def extract_turns(filename, split=0.9, max_turn_chars=100):
+    with open(filename, encoding="utf-8") as f:
         text = f.read()
 
     blocks = re.split(r"\n\s*\n", text.strip())
     turns = []
 
-    for block in blocks:
+    split = int(len(blocks) * split)
+    for block in blocks[split:]:
         lines = block.strip("\n").split("\n")
         if not lines:
             continue
@@ -50,9 +51,9 @@ def extract_turns(max_turn_chars=100):
 def sft_sample():
     dataset = CharDataset(DATA_FILE, 1, CONTEXT_SIZE)
 
-    pairs = list(pairwise(extract_turns()))
+    pairs = list(pairwise(extract_turns(DATA_FILE)))
     np.random.shuffle(pairs)
-    pairs = pairs[:1024]
+    pairs = pairs[:512]
 
     samples = []
     for (speaker_a, content_a), (speaker_b, content_b) in pairs:

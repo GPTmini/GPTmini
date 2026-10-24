@@ -265,9 +265,10 @@ class GPTTrainer(Trainer):
                 predictions.append(prediction)
                 total_loss += float(loss.data)
 
+        loss = total_loss / len(dataset)
         dataset.train()
         self.model.train()
-        return predictions, total_loss / len(dataset)
+        return predictions, loss
 
     def generate(self, dataset, prompt, steps=256):
         self.model.eval()

@@ -9,7 +9,7 @@ class LRScheduler(ABC):
         pass
 
 
-class WarmupCosineScheduler(LRScheduler):
+class WarmupCosineScheduler:
 
     def __init__(self, lr, total_steps, warmup_steps, min_lr=0.0):
         self.lr = lr

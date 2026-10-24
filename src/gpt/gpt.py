@@ -8,19 +8,20 @@ from src.gpt import CharDataset, GPT, GPTTrainer, GPTLoss
 
 np.random.seed(42)
 
-DATA_FILE = "../tinyshakespeare.txt"
-MODEL_FILE = "../tinyshakespeare-gpt.npz"
+DATA_DIR = Path(__file__).resolve().parents[2] / "data"
+DATA_FILE = str(DATA_DIR / "tinyshakespeare.txt")
+MODEL_FILE = str(DATA_DIR / "tinyshakespeare-gpt.npz")
 
-BATCH_SIZE = 4
-CONTEXT_SIZE = 128
-EMBEDDING_SIZE = 320
-HEADS = 4
+BATCH_SIZE = 16
+CONTEXT_SIZE = 256
+EMBEDDING_SIZE = 384
+HEADS = 6
 BLOCKS = 6
 EPOCHS = 10
 
-GPT_MAX_LR = 0.0005
-GPT_MIN_LR = 0.0001
-GPT_WARMUP_STEPS = 300
+GPT_MAX_LR = 0.001
+GPT_MIN_LR = GPT_MAX_LR / 10
+GPT_WARMUP_STEPS = 100
 
 
 def download_file():

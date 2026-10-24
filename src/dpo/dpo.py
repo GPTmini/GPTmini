@@ -8,27 +8,27 @@ from src.dpo.dpo_dataset import DPODataset
 from src.dpo.dpo_loss import DPOLoss
 from src.dpo.dpo_trainer import DPOTrainer
 from src.gpt import CharDataset, GPT, GPTTrainer
-from src.gpt.gpt import CONTEXT_SIZE, MODEL_FILE, EMBEDDING_SIZE, HEADS, BLOCKS, BATCH_SIZE, DATA_FILE
-from src.sft.sft import extract_turns
+from src.gpt.gpt import DATA_DIR, CONTEXT_SIZE, MODEL_FILE, EMBEDDING_SIZE, HEADS, BLOCKS, BATCH_SIZE, DATA_FILE
+from src.sft.sft import SFT_MODEL, extract_turns
 
 np.random.seed(42)
 
-DPO_SAMPLES = "../dpo-samples.pkl"
-DPO_MODEL = "../tinyshakespeare-dpo.npz"
+DPO_SAMPLES = str(DATA_DIR / "dpo-samples.pkl")
+DPO_MODEL = str(DATA_DIR / "tinyshakespeare-dpo.npz")
 
 DPO_MAX_LR = 0.000005
-DPO_MIN_LR = 0.000001
+DPO_MIN_LR = DPO_MAX_LR / 10
 DPO_WARMUP_STEPS = 50
 
 
-def generate_rejected_batch(layer, prompts, lens, pad_token=0, temperature=0.8, top_k=20):
+def generate_rejected_batch(model, prompts, lens, pad_token=0, temperature=0.8, top_k=20):
     sequences = [list(p) for p in prompts]
 
     with Tensor.no_grad():
         for _ in range(max(lens)):
             windows = [(([pad_token] * CONTEXT_SIZE) + seq)[-CONTEXT_SIZE:] for seq in sequences]
             batch = np.array(windows, dtype=np.int64)
-            logits = layer(Tensor(batch))
+            logits = model(Tensor(batch))
             next_logits = logits.data[:, -1, :] / temperature
 
             k = min(top_k, next_logits.shape[-1])
@@ -51,9 +51,9 @@ def dpo_sample():
     trainer.load(MODEL_FILE)
     model.eval()
 
-    pairs = list(pairwise(extract_turns()))
+    pairs = list(pairwise(extract_turns(DATA_FILE)))
     np.random.shuffle(pairs)
-    pairs = pairs[:1024]
+    pairs = pairs[:512]
 
     samples = []
     for start in range(0, len(pairs), 64):
@@ -87,8 +87,8 @@ def dpo_train():
     loss_fn = DPOLoss()
     optimizer = AdamWOptimizer(model.parameters, lr=DPO_MAX_LR)
     trainer = DPOTrainer(model, loss_fn, optimizer, reference)
-    trainer.load(MODEL_FILE)
-    trainer.load_reference(MODEL_FILE)
+    trainer.load(SFT_MODEL)
+    trainer.load_reference(SFT_MODEL)
 
     dpo_dataset = DPODataset(DPO_SAMPLES, CONTEXT_SIZE)
     scheduler = WarmupCosineScheduler(DPO_MAX_LR, len(dpo_dataset), DPO_WARMUP_STEPS, DPO_MIN_LR)
