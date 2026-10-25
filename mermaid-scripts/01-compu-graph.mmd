@@ -5,13 +5,12 @@ flowchart LR
     classDef test fill:#F8BBD0,stroke:#E91E63,stroke-width:2px;
     classDef out fill:#DCEDC8,stroke:#8BC34A,stroke-width:2px;
     classDef skip stroke:#B0BEC5,stroke-width:2px,stroke-dasharray: 5 5;
-
-    subgraph "trainer"
+    subgraph " "
         W[[w]]:::model
         B[[b]]:::model
     end
     X((x)):::in -.-> P[[p]] <--> L{{l}}:::test
-    W[[w]]:::model <-.-> P
-    B[[b]]:::model <-.-> P
+    W[[w]]:::model <--> P
+    B[[b]]:::model <--> P
     Y((y)):::in -.-> L
 
