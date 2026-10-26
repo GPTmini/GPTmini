@@ -1,1 +1,1 @@
-# From Neuron To GPT
+# From Neuron to GPT
