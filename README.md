@@ -102,6 +102,10 @@ jupyter lab
 
 模型完全在 CPU 上训练，规模较小，目的是看清每一步的原理，而不是追求生成质量。
 
+## 代码仓库
+
+[https://github.com/gptmini/from-neuron-to-gpt](https://github.com/gptmini/from-neuron-to-gpt)
+
 ## 许可证
 
 本项目基于 [MIT License](LICENSE) 开源。
