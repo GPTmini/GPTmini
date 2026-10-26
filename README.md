@@ -1,1 +1,1 @@
-# GPTmini
+# From Neuron To GPT

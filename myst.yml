@@ -8,7 +8,7 @@ project:
   # license:
   # description:
   # keywords: []
-  github: https://github.com/gptmini/gptmini
+  github: https://github.com/gptmini/from-neuron-to-gpt
   toc:
     - file: README.md
     - title: 神经网络基础
