@@ -69,7 +69,9 @@ pip install jupyterlab
 
 ### 准备数据
 
-教程使用莎士比亚剧本 tinyshakespeare 作为训练数据，保存位置是 `data/tinyshakespeare.txt`。有三种获取方式，任选其一：
+教程使用莎士比亚剧本 tinyshakespeare 作为训练数据，保存位置是 `data/tinyshakespeare.txt`。
+
+如果数据缺失，有三种方式可以恢复，任选其一：
 
 * 运行第一部分第 11 章的 Notebook，它会自动下载；
 * 运行预训练脚本 `python -m src.gpt.gpt`（见下文），它也会自动下载；
