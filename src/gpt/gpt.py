@@ -19,9 +19,7 @@ HEADS = 6
 BLOCKS = 6
 EPOCHS = 10
 
-GPT_MAX_LR = 0.001
-GPT_MIN_LR = GPT_MAX_LR / 10
-GPT_WARMUP_STEPS = 100
+GPT_LR = 0.001
 
 
 def download_file():
@@ -38,10 +36,10 @@ def gpt_train():
     dataset = CharDataset(DATA_FILE, BATCH_SIZE, CONTEXT_SIZE)
     model = GPT(dataset.vocab_size, CONTEXT_SIZE, EMBEDDING_SIZE, HEADS, BLOCKS)
     loss_fn = GPTLoss()
-    optimizer = AdamWOptimizer(model.parameters, lr=GPT_MAX_LR)
+    optimizer = AdamWOptimizer(model.parameters, lr=GPT_LR)
     trainer = GPTTrainer(model, loss_fn, optimizer)
 
-    scheduler = WarmupCosineScheduler(GPT_MAX_LR, EPOCHS * len(dataset), GPT_WARMUP_STEPS, GPT_MIN_LR)
+    scheduler = WarmupCosineScheduler(GPT_LR, EPOCHS * len(dataset))
     trainer.train(dataset, EPOCHS, scheduler, MODEL_FILE)
     return trainer, dataset
 

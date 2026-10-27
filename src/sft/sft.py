@@ -16,9 +16,7 @@ np.random.seed(42)
 SFT_SAMPLES = str(DATA_DIR / "sft-samples.pkl")
 SFT_MODEL = str(DATA_DIR / "tinyshakespeare-sft.npz")
 
-SFT_MAX_LR = 0.0001
-SFT_MIN_LR = SFT_MAX_LR / 10
-SFT_WARMUP_STEPS = 50
+SFT_LR = 0.0001
 
 
 def extract_turns(filename, split=0.9, max_turn_chars=100):
@@ -73,12 +71,12 @@ def sft_train():
     dataset = CharDataset(DATA_FILE, BATCH_SIZE, CONTEXT_SIZE)
     model = GPT(dataset.vocab_size, CONTEXT_SIZE, EMBEDDING_SIZE, HEADS, BLOCKS)
     loss_fn = SFTLoss()
-    optimizer = AdamWOptimizer(model.parameters, lr=SFT_MAX_LR)
+    optimizer = AdamWOptimizer(model.parameters, lr=SFT_LR)
     trainer = SFTTrainer(model, loss_fn, optimizer)
     trainer.load(MODEL_FILE)
 
     sft_dataset = SFTDataset(SFT_SAMPLES, CONTEXT_SIZE)
-    scheduler = WarmupCosineScheduler(SFT_MAX_LR, len(sft_dataset), SFT_WARMUP_STEPS, SFT_MIN_LR)
+    scheduler = WarmupCosineScheduler(SFT_LR, len(sft_dataset))
     trainer.train(sft_dataset, 1, scheduler, SFT_MODEL)
     return trainer, dataset
 

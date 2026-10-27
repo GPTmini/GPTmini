@@ -16,9 +16,7 @@ np.random.seed(42)
 DPO_SAMPLES = str(DATA_DIR / "dpo-samples.pkl")
 DPO_MODEL = str(DATA_DIR / "tinyshakespeare-dpo.npz")
 
-DPO_MAX_LR = 0.000005
-DPO_MIN_LR = DPO_MAX_LR / 10
-DPO_WARMUP_STEPS = 50
+DPO_LR = 0.000001
 
 
 def generate_rejected_batch(model, prompts, lens, pad_token=0, temperature=0.8, top_k=20):
@@ -85,13 +83,13 @@ def dpo_train():
     model = GPT(dataset.vocab_size, CONTEXT_SIZE, EMBEDDING_SIZE, HEADS, BLOCKS)
     reference = GPT(dataset.vocab_size, CONTEXT_SIZE, EMBEDDING_SIZE, HEADS, BLOCKS)
     loss_fn = DPOLoss()
-    optimizer = AdamWOptimizer(model.parameters, lr=DPO_MAX_LR)
+    optimizer = AdamWOptimizer(model.parameters, lr=DPO_LR)
     trainer = DPOTrainer(model, loss_fn, optimizer, reference)
     trainer.load(SFT_MODEL)
     trainer.load_reference(SFT_MODEL)
 
     dpo_dataset = DPODataset(DPO_SAMPLES, CONTEXT_SIZE)
-    scheduler = WarmupCosineScheduler(DPO_MAX_LR, len(dpo_dataset), DPO_WARMUP_STEPS, DPO_MIN_LR)
+    scheduler = WarmupCosineScheduler(DPO_LR, len(dpo_dataset))
     trainer.train(dpo_dataset, 1, scheduler, DPO_MODEL)
     return trainer, dataset
 
