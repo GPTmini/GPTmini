@@ -23,7 +23,7 @@ project:
             - file: tutorial/zh/artificial-neural-network/01-multilayer-perceptron/06-iteration.ipynb
             - file: tutorial/zh/artificial-neural-network/01-multilayer-perceptron/07-batch.ipynb
             - file: tutorial/zh/artificial-neural-network/01-multilayer-perceptron/08-epoch.ipynb
-            - file: tutorial/zh/artificial-neural-network/01-multilayer-perceptron/09-hidden-trainer.ipynb
+            - file: tutorial/zh/artificial-neural-network/01-multilayer-perceptron/09-hidden-layer.ipynb
             - file: tutorial/zh/artificial-neural-network/01-multilayer-perceptron/10-activation-functions.ipynb
         - title: 循环神经网络
           children:
