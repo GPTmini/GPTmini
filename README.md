@@ -1,4 +1,6 @@
-# 从零开始大模型 - From Neuron to GPT
+![banner.png](banner.png)
+
+# 前言
 
 一套从单个神经元出发，只用 NumPy 一步步手搓出 GPT 的中文教程。
 
