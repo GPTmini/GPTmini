@@ -1,7 +1,7 @@
 version: 1
 project:
   id: 2ff361ef-200a-4e6a-be05-725c77a3866d
-  title: From Neuron to GPT
+  title: 从零开始大模型
   authors:
     - name: 李晓光（Steven Li）
       # orcid: https://orcid.org/0000-0002-8713-2343
@@ -68,4 +68,4 @@ site:
   template: book-theme
   options:
     favicon: favicon.ico
-    logo: logo.png
+    logo: slogo.png
