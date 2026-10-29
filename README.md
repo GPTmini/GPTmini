@@ -42,12 +42,6 @@
 | `04-inference`    | 11–14 | 采样策略（温度、Top-k、Top-p）、停止条件、KV 缓存、批量推理 |
 | `05-fine-tuning`  | 15–18 | SFT 数据准备与训练、DPO 数据准备与训练             |
 
-## 推荐学习路线
-
-1. 先学习第一部分：依次学完 `01-multilayer-perceptron`、`02-recurrent-neural-network`，再读 `03-core-framework`，理解自动微分、计算图和训练循环；
-2. 再学习第二部分：按 `01-tokenizer` → `02-attention` → `03-pre-training` → `04-inference` → `05-fine-tuning` 的顺序依次学习；
-3. 每章末尾的课后练习建议动手完成，并观察对比结果。
-
 ## 快速开始
 
 ### 环境要求
@@ -69,41 +63,13 @@ pip install -r requirements.txt
 pip install jupyterlab
 ```
 
-### 准备数据
+### 数据
 
 教程使用莎士比亚剧本 tinyshakespeare 作为训练数据，保存位置是 `data/tinyshakespeare.txt`。
 
-如果数据缺失，有三种方式可以恢复，任选其一：
-
-* 运行第一部分第 11 章的 Notebook，它会自动下载；
-* 运行预训练脚本 `python -m src.gpt.gpt`（见下文），它也会自动下载；
-* 手动下载：
-
-```bash
-mkdir -p data
-curl -L -o data/tinyshakespeare.txt \
-  https://raw.githubusercontent.com/karpathy/char-rnn/master/data/tinyshakespeare/input.txt
-```
-
-> 第二部分的 Notebook **不会**自动下载数据。如果跳过了第一部分，请先手动准备好数据文件。
-
 ### 运行教程
 
-Notebook 通过 `from src.core import *` 的方式导入代码，所以 Python 必须能找到项目根目录下的 `src`。请先把项目根目录加入 `PYTHONPATH`，再在同一个终端里启动 Jupyter：
-
-```bash
-# macOS / Linux
-export PYTHONPATH="$(pwd)"
-
-# Windows PowerShell
-# $env:PYTHONPATH = (Get-Location).Path
-
-jupyter lab
-```
-
-然后按编号顺序打开 `tutorial/zh` 下的 Notebook 即可。
-
-> Jupyter 内核的工作目录是 **Notebook 所在的目录**，Notebook 里的数据路径（如 `../../../../data/tinyshakespeare.txt`）也是相对这个目录写的。所以不需要、也不应该改变工作目录，只要设置好 `PYTHONPATH` 即可。
+按编号顺序打开 `tutorial/zh` 下的 Notebook 即可。
 
 ### 用命令行运行完整流程
 
