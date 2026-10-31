@@ -56,6 +56,7 @@ class DPOTrainer(GPTTrainer):
     def _sequence_log_prob(x, y, mask):
         exp = np.exp(x.data - np.max(x.data, axis=-1, keepdims=True))
         softmax = exp / np.sum(exp, axis=-1, keepdims=True)
+
         y = np.asarray(y.data, dtype=np.int64)
         mask = np.asarray(mask.data, dtype=softmax.dtype)
         picked = np.clip(np.take_along_axis(softmax, y[..., None], axis=-1).squeeze(-1), 1e-10, 1)
